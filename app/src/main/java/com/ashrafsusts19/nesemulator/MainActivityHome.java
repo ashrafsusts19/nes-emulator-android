@@ -8,6 +8,7 @@ import androidx.core.content.ContextCompat;
 import android.Manifest;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.view.View;
@@ -77,7 +78,8 @@ public class MainActivityHome extends AppCompatActivity {
                 PackageManager.PERMISSION_GRANTED){
             Toast.makeText(this, "Storage Permission Granted", Toast.LENGTH_SHORT).show();
             // TODO: load loadGameActivity
-
+            Intent intent = new Intent(this, LoadGameActivity.class);
+            startActivity(intent);
         }
     }
 
@@ -94,7 +96,8 @@ public class MainActivityHome extends AppCompatActivity {
     }
 
     private void aboutOptionPressed() {
-
+        Intent intent = new Intent(this, AboutActivity.class);
+        startActivity(intent);
     }
 
     private void exitOptionPressed() {

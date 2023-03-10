@@ -1,19 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".MainActivityHome"
-    android:weightSum="4"
-    android:orientation="vertical"
-    android:background="#1c1d42">
+    android:background="#1b2742">
 
     <RelativeLayout
         android:id="@+id/statusLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_weight="1"
         android:padding="10dp"
         android:layout_margin="10dp">
 
@@ -39,17 +36,17 @@
 
     <RelativeLayout
         android:id="@+id/optionsLayout"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_margin="10dp"
-        android:padding="10dp"
-        android:layout_weight="3"
-        android:background="#293d50">
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/statusLayout"
+        android:layout_margin="30dp"
+        android:background="#9db9b2"
+        android:padding="10dp">
 
         <ListView
+            android:id="@+id/optionsList"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/optionsList"/>
+            android:layout_height="wrap_content" />
     </RelativeLayout>
 
-</LinearLayout>
+</RelativeLayout>
