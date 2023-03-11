@@ -24,6 +24,7 @@ public class MainActivityHome extends AppCompatActivity {
 
     private ListView optionsList;
     private int STORAGE_PERMISSION_CODE = 1;
+    private ArrayAdapter<String> optionsAdapter;
     ArrayList<String> options;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,7 +34,7 @@ public class MainActivityHome extends AppCompatActivity {
         optionsList = findViewById(R.id.optionsList);
         options = new ArrayList<>(Arrays.asList("Load Rom", "Start", "Recent Games", "Options", "About",
                 "Exit"));
-        ArrayAdapter<String> optionsAdapter = new ArrayAdapter<>(
+        optionsAdapter = new ArrayAdapter<>(
                 this,
                 android.R.layout.simple_list_item_1,
                 options
