@@ -1,5 +1,9 @@
 package com.ashrafsusts19.nesemulator;
 
+import androidx.activity.result.ActivityResult;
+import androidx.activity.result.ActivityResultCallback;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
@@ -22,10 +26,24 @@ import java.util.Arrays;
 
 public class MainActivityHome extends AppCompatActivity {
 
+    public static final String requestRomLocationKey = "ROM_LOCATION";
     private ListView optionsList;
     private int STORAGE_PERMISSION_CODE = 1;
     private ArrayAdapter<String> optionsAdapter;
     ArrayList<String> options;
+    ActivityResultLauncher<Intent> startForResultRomLocation =
+            registerForActivityResult(new ActivityResultContracts.StartActivityForResult(),
+                    new ActivityResultCallback<ActivityResult>() {
+                        @Override
+                        public void onActivityResult(ActivityResult result) {
+                            if (result != null && result.getResultCode() == RESULT_OK){
+                                if (result.getData() != null && result.getData().getStringExtra(requestRomLocationKey) != null){
+                                    Toast.makeText(MainActivityHome.this,
+                                            result.getData().getStringExtra(requestRomLocationKey), Toast.LENGTH_SHORT).show();
+                                }
+                            }
+                        }
+                    });
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -78,9 +96,9 @@ public class MainActivityHome extends AppCompatActivity {
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) ==
                 PackageManager.PERMISSION_GRANTED){
             Toast.makeText(this, "Storage Permission Granted", Toast.LENGTH_SHORT).show();
-            // TODO: load loadGameActivity
             Intent intent = new Intent(this, LoadGameActivity.class);
-            startActivity(intent);
+
+            startForResultRomLocation.launch(intent);
         }
     }
 

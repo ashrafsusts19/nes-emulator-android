@@ -3,6 +3,7 @@ package com.ashrafsusts19.nesemulator;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Environment;
 import android.view.Menu;
@@ -109,6 +110,11 @@ public class LoadGameActivity extends AppCompatActivity {
                 if (ext.equals(".nes")){
                     Toast.makeText(this, "You found a nes game, YAY", Toast.LENGTH_SHORT).show();
                     // TODO: Return file location to main activity
+                    String romPath = newPath;
+                    Intent intent = new Intent();
+                    intent.putExtra(MainActivityHome.requestRomLocationKey, romPath);
+                    setResult(RESULT_OK, intent);
+                    finish();
                 }
             }
         }
