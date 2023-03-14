@@ -162,23 +162,23 @@ public class Olc2C02 extends Olc2C02A {
 
     public void IncrementScrollX()
     {
-        if (mask.get(Olc2C02A.Mask.MEMBER.RENDER_BACKGROUND) > 0 || mask.get(Olc2C02A.Mask.MEMBER.RENDER_SPRITES) > 0)
+        if (mask.get(REGISTERS.RENDER_BACKGROUND) > 0 || mask.get(REGISTERS.RENDER_SPRITES) > 0)
         {
             // A single name table is 32x30 tiles. As we increment horizontally
             // we may cross into a neighbouring nametable, or wrap around to
             // a neighbouring nametable
-            if (vram_addr.get(Olc2C02A.Loopy_register.MEMBER.COARSE_X) == 31)
+            if (vram_addr.get(REGISTERS.COARSE_X) == 31)
             {
                 // Leaving nametable so wrap address round
-                vram_addr.set(Olc2C02A.Loopy_register.MEMBER.COARSE_X, 0);
+                vram_addr.set(REGISTERS.COARSE_X, 0);
                 // Flip target nametable bit
-                vram_addr.set(Olc2C02A.Loopy_register.MEMBER.NAMETABLE_X, ushort(~vram_addr.get(Olc2C02A.Loopy_register.MEMBER.NAMETABLE_X)));
+                vram_addr.set(REGISTERS.NAMETABLE_X, ushort(~vram_addr.get(REGISTERS.NAMETABLE_X)));
             }
             else
             {
                 // Staying in current nametable, so just increment
-                vram_addr.set(Olc2C02A.Loopy_register.MEMBER.COARSE_X,
-                        ushort(vram_addr.get(Olc2C02A.Loopy_register.MEMBER.COARSE_X) + 1));
+                vram_addr.set(REGISTERS.COARSE_X,
+                        ushort(vram_addr.get(REGISTERS.COARSE_X) + 1));
             }
         }
     }
@@ -186,40 +186,40 @@ public class Olc2C02 extends Olc2C02A {
     public void IncrementScrollY()
     {
         // Ony if rendering is enabled
-        if (mask.get(Olc2C02A.Mask.MEMBER.RENDER_BACKGROUND) > 0 || mask.get(Olc2C02A.Mask.MEMBER.RENDER_SPRITES) > 0)
+        if (mask.get(REGISTERS.RENDER_BACKGROUND) > 0 || mask.get(REGISTERS.RENDER_SPRITES) > 0)
         {
             // If possible, just increment the fine y offset
-            if (vram_addr.get(Olc2C02A.Loopy_register.MEMBER.FINE_Y) < 7)
+            if (vram_addr.get(REGISTERS.FINE_Y) < 7)
             {
-                vram_addr.set(Olc2C02A.Loopy_register.MEMBER.FINE_Y,
-                        ushort(vram_addr.get(Olc2C02A.Loopy_register.MEMBER.FINE_Y) + 1));
+                vram_addr.set(REGISTERS.FINE_Y,
+                        ushort(vram_addr.get(REGISTERS.FINE_Y) + 1));
             }
             else
             {
                 // Reset fine y offset
-                vram_addr.set(Olc2C02A.Loopy_register.MEMBER.FINE_Y, 0);
+                vram_addr.set(REGISTERS.FINE_Y, 0);
 
                 // Check if we need to swap vertical nametable targets
-                if (vram_addr.get(Olc2C02A.Loopy_register.MEMBER.COARSE_Y) == 29)
+                if (vram_addr.get(REGISTERS.COARSE_Y) == 29)
                 {
                     // We do, so reset coarse y offset
-                    vram_addr.set(Olc2C02A.Loopy_register.MEMBER.COARSE_Y, 0);
+                    vram_addr.set(REGISTERS.COARSE_Y, 0);
                     // And flip the target nametable bit
-                    vram_addr.set(Olc2C02A.Loopy_register.MEMBER.NAMETABLE_Y,
-                            ushort(~vram_addr.get(Olc2C02A.Loopy_register.MEMBER.NAMETABLE_Y))) ;
+                    vram_addr.set(REGISTERS.NAMETABLE_Y,
+                            ushort(~vram_addr.get(REGISTERS.NAMETABLE_Y))) ;
                 }
-                else if (vram_addr.get(Olc2C02A.Loopy_register.MEMBER.COARSE_Y) == 31)
+                else if (vram_addr.get(REGISTERS.COARSE_Y) == 31)
                 {
                     // In case the pointer is in the attribute memory, we
                     // just wrap around the current nametable
-                    vram_addr.set(Olc2C02A.Loopy_register.MEMBER.COARSE_Y, 0);
+                    vram_addr.set(REGISTERS.COARSE_Y, 0);
                 }
                 else
                 {
                     // None of the above boundary/wrapping conditions apply
                     // so just increment the coarse y offset
-                    vram_addr.set(Olc2C02A.Loopy_register.MEMBER.COARSE_Y,
-                            ushort(vram_addr.get(Olc2C02A.Loopy_register.MEMBER.COARSE_Y) + 1));
+                    vram_addr.set(REGISTERS.COARSE_Y,
+                            ushort(vram_addr.get(REGISTERS.COARSE_Y) + 1));
                 }
             }
         }
@@ -228,21 +228,21 @@ public class Olc2C02 extends Olc2C02A {
     public void TransferAddressX()
     {
         // Ony if rendering is enabled
-        if (mask.get(Olc2C02A.Mask.MEMBER.RENDER_BACKGROUND) > 0 || mask.get(Olc2C02A.Mask.MEMBER.RENDER_SPRITES) > 0)
+        if (mask.get(REGISTERS.RENDER_BACKGROUND) > 0 || mask.get(REGISTERS.RENDER_SPRITES) > 0)
         {
-            vram_addr.set(Olc2C02A.Loopy_register.MEMBER.NAMETABLE_X, tram_addr.get(Olc2C02A.Loopy_register.MEMBER.NAMETABLE_X));
-            vram_addr.set(Olc2C02A.Loopy_register.MEMBER.COARSE_X, tram_addr.get(Olc2C02A.Loopy_register.MEMBER.COARSE_X));
+            vram_addr.set(REGISTERS.NAMETABLE_X, tram_addr.get(REGISTERS.NAMETABLE_X));
+            vram_addr.set(REGISTERS.COARSE_X, tram_addr.get(REGISTERS.COARSE_X));
         }
     }
 
     public void TransferAddressY()
     {
         // Ony if rendering is enabled
-        if (mask.get(Olc2C02A.Mask.MEMBER.RENDER_BACKGROUND) > 0 || mask.get(Olc2C02A.Mask.MEMBER.RENDER_SPRITES) > 0)
+        if (mask.get(REGISTERS.RENDER_BACKGROUND) > 0 || mask.get(REGISTERS.RENDER_SPRITES) > 0)
         {
-            vram_addr.set(Olc2C02A.Loopy_register.MEMBER.FINE_Y, tram_addr.get(Olc2C02A.Loopy_register.MEMBER.FINE_Y));
-            vram_addr.set(Olc2C02A.Loopy_register.MEMBER.NAMETABLE_Y, tram_addr.get(Olc2C02A.Loopy_register.MEMBER.NAMETABLE_Y));
-            vram_addr.set(Olc2C02A.Loopy_register.MEMBER.COARSE_Y, tram_addr.get(Olc2C02A.Loopy_register.MEMBER.COARSE_Y));
+            vram_addr.set(REGISTERS.FINE_Y, tram_addr.get(REGISTERS.FINE_Y));
+            vram_addr.set(REGISTERS.NAMETABLE_Y, tram_addr.get(REGISTERS.NAMETABLE_Y));
+            vram_addr.set(REGISTERS.COARSE_Y, tram_addr.get(REGISTERS.COARSE_Y));
         }
     }
 
@@ -257,7 +257,7 @@ public class Olc2C02 extends Olc2C02A {
 
     public void UpdateShifters()
     {
-        if (mask.get(Olc2C02A.Mask.MEMBER.RENDER_BACKGROUND) > 0)
+        if (mask.get(REGISTERS.RENDER_BACKGROUND) > 0)
         {
             // Shifting background tile pattern row
             bg_shifter_pattern_lo = ushort(bg_shifter_pattern_lo << 1);
@@ -267,7 +267,7 @@ public class Olc2C02 extends Olc2C02A {
             bg_shifter_attrib_lo = ushort(bg_shifter_attrib_lo << 1);
             bg_shifter_attrib_hi = ushort(bg_shifter_attrib_hi << 1);
         }
-        if (mask.get(Olc2C02A.Mask.MEMBER.RENDER_SPRITES) > 0 && cycle >= 1 && cycle < 258)
+        if (mask.get(REGISTERS.RENDER_SPRITES) > 0 && cycle >= 1 && cycle < 258)
         {
             for (int i = 0; i < sprite_count; i++)
             {
@@ -337,13 +337,13 @@ public class Olc2C02 extends Olc2C02A {
             switch (addr)
             {
                 case 0x0000: // Control
-                    data = control.get(Olc2C02A.Control.MEMBER.REG);
+                    data = control.get(REGISTERS.REG);
                     break;
                 case 0x0001: // Mask
-                    data = mask.get(Olc2C02A.Mask.MEMBER.REG);
+                    data = mask.get(REGISTERS.REG);
                     break;
                 case 0x0002: // Status
-                    data = status.get(Olc2C02A.Status.MEMBER.REG);
+                    data = status.get(REGISTERS.REG);
                     break;
                 case 0x0003: // OAM Address
                     break;
@@ -365,8 +365,8 @@ public class Olc2C02 extends Olc2C02A {
                 case 0x0001: // Mask
                     break;
                 case 0x0002: // Status
-                    data = ubyte((short) ((this.status.get(Olc2C02A.Status.MEMBER.REG) & 0xE0) | (this.ppu_data_buffer & 0x1F)));
-                    this.status.set(Olc2C02A.Status.MEMBER.VERTICAL_BLANK, (short) 0);
+                    data = ubyte((short) ((this.status.get(REGISTERS.REG) & 0xE0) | (this.ppu_data_buffer & 0x1F)));
+                    this.status.set(REGISTERS.VERTICAL_BLANK, (short) 0);
                     this.address_latch = 0;
                     break;
                 case 0x0003: // OAM Address
@@ -380,13 +380,13 @@ public class Olc2C02 extends Olc2C02A {
                     break;
                 case 0x0007: // PPU Data
                     data = this.ppu_data_buffer;
-                    this.ppu_data_buffer = this.ppuRead(this.vram_addr.get(Olc2C02A.Loopy_register.MEMBER.REG));
-                    if (this.vram_addr.get(Olc2C02A.Loopy_register.MEMBER.REG) >= 0x3F00){
+                    this.ppu_data_buffer = this.ppuRead(this.vram_addr.get(REGISTERS.REG));
+                    if (this.vram_addr.get(REGISTERS.REG) >= 0x3F00){
                         data = this.ppu_data_buffer;
                     }
-                    vram_addr.set(Olc2C02A.Loopy_register.MEMBER.REG,
-                            ushort((this.vram_addr.get(Olc2C02A.Loopy_register.MEMBER.REG) +
-                                    (control.get(Olc2C02A.Control.MEMBER.INCREMENT_MODE) > 0? 32 : 1))));
+                    vram_addr.set(REGISTERS.REG,
+                            ushort((this.vram_addr.get(REGISTERS.REG) +
+                                    (control.get(REGISTERS.INCREMENT_MODE) > 0? 32 : 1))));
                     break;
             }
         }
@@ -407,12 +407,12 @@ public class Olc2C02 extends Olc2C02A {
         switch (addr)
         {
             case 0x0000: // Control
-                control.set(Olc2C02A.Control.MEMBER.REG, data);
-                tram_addr.set(Olc2C02A.Loopy_register.MEMBER.NAMETABLE_X, control.get(Olc2C02A.Control.MEMBER.NAMETABLE_X));
-                tram_addr.set(Olc2C02A.Loopy_register.MEMBER.NAMETABLE_Y, control.get(Olc2C02A.Control.MEMBER.NAMETABLE_Y));
+                control.set(REGISTERS.REG, data);
+                tram_addr.set(REGISTERS.NAMETABLE_X, control.get(REGISTERS.NAMETABLE_X));
+                tram_addr.set(REGISTERS.NAMETABLE_Y, control.get(REGISTERS.NAMETABLE_Y));
                 break;
             case 0x0001: // Mask
-                mask.set(Olc2C02A.Mask.MEMBER.REG, data);
+                mask.set(REGISTERS.REG, data);
                 break;
             case 0x0002: // Status
                 break;
@@ -426,35 +426,35 @@ public class Olc2C02 extends Olc2C02A {
                 if (this.address_latch == 0)
                 {
                     this.fine_x = ubyte((short) (data & 0x07));
-                    this.tram_addr.set(Olc2C02A.Loopy_register.MEMBER.COARSE_X, ushort((data >> 3)));
+                    this.tram_addr.set(REGISTERS.COARSE_X, ushort((data >> 3)));
                     this.address_latch = 1;
                 }
                 else
                 {
-                    this.tram_addr.set(Olc2C02A.Loopy_register.MEMBER.FINE_Y, ushort((data & 0x07)));
-                    this.tram_addr.set(Olc2C02A.Loopy_register.MEMBER.COARSE_Y, ushort((data >> 3)));
+                    this.tram_addr.set(REGISTERS.FINE_Y, ushort((data & 0x07)));
+                    this.tram_addr.set(REGISTERS.COARSE_Y, ushort((data >> 3)));
                     this.address_latch = 0;
                 }
                 break;
             case 0x0006: // PPU Address
                 if (this.address_latch == 0){
-                    this.tram_addr.set(Olc2C02A.Loopy_register.MEMBER.REG, ushort(
-                            ((ushort((data & 0x3F) << 8) | (tram_addr.get(Olc2C02A.Loopy_register.MEMBER.REG) & 0x00FF)))));
+                    this.tram_addr.set(REGISTERS.REG, ushort(
+                            ((ushort((data & 0x3F) << 8) | (tram_addr.get(REGISTERS.REG) & 0x00FF)))));
                     this.address_latch = 1;
                 }
                 else {
-                    this.tram_addr.set(Olc2C02A.Loopy_register.MEMBER.REG,
-                            ushort((this.tram_addr.get(Olc2C02A.Loopy_register.MEMBER.REG) & 0xFF00) | data));
-                    this.vram_addr.set(Olc2C02A.Loopy_register.MEMBER.REG,
-                            this.tram_addr.get(Olc2C02A.Loopy_register.MEMBER.REG));
+                    this.tram_addr.set(REGISTERS.REG,
+                            ushort((this.tram_addr.get(REGISTERS.REG) & 0xFF00) | data));
+                    this.vram_addr.set(REGISTERS.REG,
+                            this.tram_addr.get(REGISTERS.REG));
                     this.address_latch = 0;
                 }
                 break;
             case 0x0007: // PPU Data
-                this.ppuWrite(vram_addr.get(Olc2C02A.Loopy_register.MEMBER.REG), data);
-                int treg = this.vram_addr.get(Olc2C02A.Loopy_register.MEMBER.REG);
-                treg += control.get(Olc2C02A.Control.MEMBER.INCREMENT_MODE) > 0? 32: 1;
-                vram_addr.set(Olc2C02A.Loopy_register.MEMBER.REG, ushort(treg));
+                this.ppuWrite(vram_addr.get(REGISTERS.REG), data);
+                int treg = this.vram_addr.get(REGISTERS.REG);
+                treg += control.get(REGISTERS.INCREMENT_MODE) > 0? 32: 1;
+                vram_addr.set(REGISTERS.REG, ushort(treg));
                 break;
         }
     }
@@ -501,7 +501,7 @@ public class Olc2C02 extends Olc2C02A {
             if (addr == 0x0014) addr = 0x0004;
             if (addr == 0x0018) addr = 0x0008;
             if (addr == 0x001C) addr = 0x000C;
-            data = ubyte((short) (tblPalette[addr] & (mask.get(Olc2C02A.Mask.MEMBER.GRAYSCALE) > 0 ? 0x30 : 0x3F)));
+            data = ubyte((short) (tblPalette[addr] & (mask.get(REGISTERS.GRAYSCALE) > 0 ? 0x30 : 0x3F)));
         }
 
         return ubyte(data);
@@ -570,11 +570,11 @@ public class Olc2C02 extends Olc2C02A {
                 this.cycle = 1;
             }
             if (this.scanline == -1 && this.cycle == 1){
-                this.status.set(Olc2C02A.Status.MEMBER.VERTICAL_BLANK, (short)  0);
+                this.status.set(REGISTERS.VERTICAL_BLANK, (short)  0);
 
-                status.set(Olc2C02A.Status.MEMBER.SPRITE_OVERFLOW, (short) 0);
+                status.set(REGISTERS.SPRITE_OVERFLOW, (short) 0);
 
-                status.set(Olc2C02A.Status.MEMBER.SPRITE_ZERO_HIT, (short) 0);
+                status.set(REGISTERS.SPRITE_ZERO_HIT, (short) 0);
 
                 for (int i = 0; i < 8; i++)
                 {
@@ -588,30 +588,30 @@ public class Olc2C02 extends Olc2C02A {
                     case 0:
                         this.LoadBackgroundShifters();
                         this.bg_next_tile_id = this.ppuRead(0x2000 |
-                                (vram_addr.get(Olc2C02A.Loopy_register.MEMBER.REG) & 0x0FFF));
+                                (vram_addr.get(REGISTERS.REG) & 0x0FFF));
                         break;
                     case 2:
-                        bg_next_tile_attrib = ppuRead((0x23C0 | ushort(vram_addr.get(Olc2C02A.Loopy_register.MEMBER.NAMETABLE_Y) << 11)
-                                | ushort(vram_addr.get(Olc2C02A.Loopy_register.MEMBER.NAMETABLE_X) << 10)
-                                | ushort((vram_addr.get(Olc2C02A.Loopy_register.MEMBER.COARSE_Y) >> 2) << 3)
-                                | ushort(vram_addr.get(Olc2C02A.Loopy_register.MEMBER.COARSE_X) >> 2)));
-                        if ((vram_addr.get(Olc2C02A.Loopy_register.MEMBER.COARSE_Y) & 0x02) > 0) {
+                        bg_next_tile_attrib = ppuRead((0x23C0 | ushort(vram_addr.get(REGISTERS.NAMETABLE_Y) << 11)
+                                | ushort(vram_addr.get(REGISTERS.NAMETABLE_X) << 10)
+                                | ushort((vram_addr.get(REGISTERS.COARSE_Y) >> 2) << 3)
+                                | ushort(vram_addr.get(REGISTERS.COARSE_X) >> 2)));
+                        if ((vram_addr.get(REGISTERS.COARSE_Y) & 0x02) > 0) {
                             bg_next_tile_attrib >>= 4;
                         }
-                        if ((vram_addr.get(Olc2C02A.Loopy_register.MEMBER.COARSE_X) & 0x02) > 0) {
+                        if ((vram_addr.get(REGISTERS.COARSE_X) & 0x02) > 0) {
                             bg_next_tile_attrib >>= 2;
                         }
                         bg_next_tile_attrib &= 0x03;
                         break;
                     case 4:
-                        bg_next_tile_lsb = ppuRead(ushort(control.get(Olc2C02A.Control.MEMBER.PATTERN_BACKGROUND) << 12)
+                        bg_next_tile_lsb = ppuRead(ushort(control.get(REGISTERS.PATTERN_BACKGROUND) << 12)
                                 + ushort(ushort(bg_next_tile_id) << 4)
-                                + (vram_addr.get(Olc2C02A.Loopy_register.MEMBER.FINE_Y)) + 0);
+                                + (vram_addr.get(REGISTERS.FINE_Y)) + 0);
                         break;
                     case 6:
-                        bg_next_tile_msb = ppuRead(ushort(control.get(Olc2C02A.Control.MEMBER.PATTERN_BACKGROUND) << 12)
+                        bg_next_tile_msb = ppuRead(ushort(control.get(REGISTERS.PATTERN_BACKGROUND) << 12)
                                 + ushort(ushort(bg_next_tile_id) << 4)
-                                + ushort((vram_addr.get(Olc2C02A.Loopy_register.MEMBER.FINE_Y)) + 8));
+                                + ushort((vram_addr.get(REGISTERS.FINE_Y)) + 8));
                         break;
                     case 7:
                         this.IncrementScrollX();
@@ -630,7 +630,7 @@ public class Olc2C02 extends Olc2C02A {
 
             if (cycle == 338 || cycle == 340)
             {
-                bg_next_tile_id = ppuRead(0x2000 | (vram_addr.get(Olc2C02A.Loopy_register.MEMBER.REG) & 0x0FFF));
+                bg_next_tile_id = ppuRead(0x2000 | (vram_addr.get(REGISTERS.REG) & 0x0FFF));
             }
 
             if (scanline == -1 && cycle >= 280 && cycle < 305){
@@ -658,7 +658,7 @@ public class Olc2C02 extends Olc2C02A {
 
                 while (nOAMEntry < 64 && sprite_count < 9) {
                     int diff = ushort(ushort(scanline) - ushort(OAM[nOAMEntry].y));
-                    if (diff >= 0 && diff < (control.get(Olc2C02A.Control.MEMBER.SPRITE_SIZE) > 0 ? 16 : 8)) {
+                    if (diff >= 0 && diff < (control.get(REGISTERS.SPRITE_SIZE) > 0 ? 16 : 8)) {
                         if (sprite_count < 8) {
                             // Is this sprite sprite zero?
                             if (nOAMEntry == 0) {
@@ -675,7 +675,7 @@ public class Olc2C02 extends Olc2C02A {
                 } // End of sprite evaluation for next scanline
 
                 // Set sprite overflow flag
-                status.set(Olc2C02A.Status.MEMBER.SPRITE_OVERFLOW, (short) ((sprite_count > 8) ? 1 : 0));
+                status.set(REGISTERS.SPRITE_OVERFLOW, (short) ((sprite_count > 8) ? 1 : 0));
             }
 
             if (cycle == 340)
@@ -684,10 +684,10 @@ public class Olc2C02 extends Olc2C02A {
                     short sprite_pattern_bits_lo, sprite_pattern_bits_hi;
                     int sprite_pattern_addr_lo, sprite_pattern_addr_hi;
 
-                    if (control.get(Olc2C02A.Control.MEMBER.SPRITE_SIZE) == 0) {
+                    if (control.get(REGISTERS.SPRITE_SIZE) == 0) {
                         if ((spriteScanline[i].attribute & 0x80) == 0) {
                             sprite_pattern_addr_lo =
-                                    ushort(ushort(control.get(Olc2C02A.Control.MEMBER.PATTERN_SPRITE) << 12)  // Which Pattern Table? 0KB or 4KB offset
+                                    ushort(ushort(control.get(REGISTERS.PATTERN_SPRITE) << 12)  // Which Pattern Table? 0KB or 4KB offset
                                             | ushort(spriteScanline[i].id << 4)  // Which Cell? Tile ID * 16 (16 bytes per tile)
                                             | ushort(scanline - spriteScanline[i].y)); // Which Row in cell? (0->7)
 
@@ -695,7 +695,7 @@ public class Olc2C02 extends Olc2C02A {
                         else {
                             // Sprite is flipped vertically, i.e. upside down
                             sprite_pattern_addr_lo =
-                                    ushort(ushort(control.get(Olc2C02A.Control.MEMBER.PATTERN_SPRITE) << 12)  // Which Pattern Table? 0KB or 4KB offset
+                                    ushort(ushort(control.get(REGISTERS.PATTERN_SPRITE) << 12)  // Which Pattern Table? 0KB or 4KB offset
                                             | ushort(spriteScanline[i].id << 4)  // Which Cell? Tile ID * 16 (16 bytes per tile)
                                             | ushort(7 - (scanline - spriteScanline[i].y))); // Which Row in cell? (7->0)
                         }
@@ -760,8 +760,8 @@ public class Olc2C02 extends Olc2C02A {
 
         if (scanline >= 241 && scanline < 261){
             if (this.scanline == 241 && this.cycle == 1){
-                this.status.set(Olc2C02A.Status.MEMBER.VERTICAL_BLANK, (short) 1);
-                if (this.control.get(Olc2C02A.Control.MEMBER.ENABLE_NMI) > 0){
+                this.status.set(REGISTERS.VERTICAL_BLANK, (short) 1);
+                if (this.control.get(REGISTERS.ENABLE_NMI) > 0){
                     this.nmi = true;
                 }
             }
@@ -770,7 +770,7 @@ public class Olc2C02 extends Olc2C02A {
         short bg_pixel = 0x00;
         short bg_palette = 0x00;
 
-        if (mask.get(Olc2C02A.Mask.MEMBER.RENDER_BACKGROUND) > 0){
+        if (mask.get(REGISTERS.RENDER_BACKGROUND) > 0){
             int bit_mux = 0x8000 >> fine_x;
 
             // Select Plane pixels by extracting from the shifter
@@ -792,7 +792,7 @@ public class Olc2C02 extends Olc2C02A {
         short fg_priority = 0x00;// A bit of the sprite attribute indicates if its
 
 
-        if (mask.get(Olc2C02A.Mask.MEMBER.RENDER_SPRITES) > 0)
+        if (mask.get(REGISTERS.RENDER_SPRITES) > 0)
         {
             bSpriteZeroBeingRendered = false;
 
@@ -844,15 +844,15 @@ public class Olc2C02 extends Olc2C02A {
             }
 
             if (bSpriteZeroHitPossible && bSpriteZeroBeingRendered) {
-                if ((mask.get(Olc2C02A.Mask.MEMBER.RENDER_BACKGROUND) & mask.get(Olc2C02A.Mask.MEMBER.RENDER_SPRITES)) > 0) {
-                    if (ushort(~(mask.get(Olc2C02A.Mask.MEMBER.RENDER_BACKGROUND_LEFT) | mask.get(Olc2C02A.Mask.MEMBER.RENDER_SPRITES_LEFT))) > 0) {
+                if ((mask.get(REGISTERS.RENDER_BACKGROUND) & mask.get(REGISTERS.RENDER_SPRITES)) > 0) {
+                    if (ushort(~(mask.get(REGISTERS.RENDER_BACKGROUND_LEFT) | mask.get(REGISTERS.RENDER_SPRITES_LEFT))) > 0) {
                         if (cycle >= 9 && cycle < 258) {
-                            status.set(Olc2C02A.Status.MEMBER.SPRITE_ZERO_HIT, (short) 1);
+                            status.set(REGISTERS.SPRITE_ZERO_HIT, (short) 1);
                         }
                     }
                     else {
                         if (cycle >= 1 && cycle < 258) {
-                            status.set(Olc2C02A.Status.MEMBER.SPRITE_ZERO_HIT, (short) 1);
+                            status.set(REGISTERS.SPRITE_ZERO_HIT, (short) 1);
                         }
                     }
                 }
@@ -889,11 +889,11 @@ public class Olc2C02 extends Olc2C02A {
         bg_shifter_pattern_hi = 0x0000;
         bg_shifter_attrib_lo = 0x0000;
         bg_shifter_attrib_hi = 0x0000;
-        status.set(Olc2C02A.Status.MEMBER.REG,(short) 0x00);
-        mask.set(Olc2C02A.Mask.MEMBER.REG, (short) 0x00);
-        control.set(Olc2C02A.Control.MEMBER.REG, (short) 0x00);
-        vram_addr.set(Olc2C02A.Loopy_register.MEMBER.REG, 0x0000);
-        tram_addr.set(Olc2C02A.Loopy_register.MEMBER.REG, 0x0000);
+        status.set(REGISTERS.REG,(short) 0x00);
+        mask.set(REGISTERS.REG, (short) 0x00);
+        control.set(REGISTERS.REG, (short) 0x00);
+        vram_addr.set(REGISTERS.REG, 0x0000);
+        tram_addr.set(REGISTERS.REG, 0x0000);
 
     }
 }

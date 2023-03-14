@@ -48,7 +48,7 @@ public class LoadGameActivity extends AppCompatActivity {
                 int dotPosition = f.getPath().lastIndexOf(".");
                 if (dotPosition != -1) {
                     String ext = f.getPath().substring(dotPosition);
-                    if (ext == ".nes"){
+                    if (ext.equals(".nes")){
                         filesList.add(f.getName());
                     }
                 }
@@ -112,7 +112,7 @@ public class LoadGameActivity extends AppCompatActivity {
                     // TODO: Return file location to main activity
                     String romPath = newPath;
                     Intent intent = new Intent();
-                    intent.putExtra(MainActivityHome.requestRomLocationKey, romPath);
+                    intent.putExtra(MainActivityHome.ROM_LOCATION_KEY, romPath);
                     setResult(RESULT_OK, intent);
                     finish();
                 }

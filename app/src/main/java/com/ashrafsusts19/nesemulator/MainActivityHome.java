@@ -19,14 +19,21 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
 
 public class MainActivityHome extends AppCompatActivity {
 
-    public static final String requestRomLocationKey = "ROM_LOCATION";
+    public static final String ROM_LOCATION_KEY = "ROM_LOCATION";
+    private String romLocation = null;
     private ListView optionsList;
     private int STORAGE_PERMISSION_CODE = 1;
     private ArrayAdapter<String> optionsAdapter;
@@ -37,9 +44,8 @@ public class MainActivityHome extends AppCompatActivity {
                         @Override
                         public void onActivityResult(ActivityResult result) {
                             if (result != null && result.getResultCode() == RESULT_OK){
-                                if (result.getData() != null && result.getData().getStringExtra(requestRomLocationKey) != null){
-                                    Toast.makeText(MainActivityHome.this,
-                                            result.getData().getStringExtra(requestRomLocationKey), Toast.LENGTH_SHORT).show();
+                                if (result.getData() != null && result.getData().getStringExtra(ROM_LOCATION_KEY) != null){
+                                    attemptRomInsert(result.getData().getStringExtra(ROM_LOCATION_KEY));
                                 }
                             }
                         }
@@ -88,6 +94,46 @@ public class MainActivityHome extends AppCompatActivity {
 
     }
 
+    private void attemptRomInsert(String location){
+        if (isValidRom(location)){
+            this.romLocation = location;
+            TextView tv = findViewById(R.id.textLoadedRom);
+            tv.setText(romLocation.substring(romLocation.lastIndexOf("/") + 1));
+
+        }
+        else {
+            this.romLocation = null;
+            TextView tv = findViewById(R.id.textLoadedRom);
+            tv.setText("None");
+            Toast.makeText(MainActivityHome.this, "Invalid Rom", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    private boolean isValidRom(String location){
+        File rom = new File(location);
+        int dotPosition = rom.getPath().lastIndexOf(".");
+        if (dotPosition != -1) {
+            String ext = rom.getPath().substring(dotPosition);
+            if (ext.equals(".nes")){
+                byte[] header = new byte[16];
+                InputStream cartFile = null;
+                try {
+                    cartFile = new FileInputStream(location);
+                    cartFile.read(header);
+                    if (header[0] == (byte) 0x4e && header[1] == (byte) 0x45 && header[2] == (byte) 0x53){
+                        return true;
+                    }
+
+                } catch (FileNotFoundException e) {
+                    return false;
+                } catch (IOException e) {
+                    return false;
+                }
+            }
+        }
+        return false;
+    }
+
     private void loadRomOptionPressed(){
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) !=
                 PackageManager.PERMISSION_GRANTED){
@@ -103,7 +149,13 @@ public class MainActivityHome extends AppCompatActivity {
     }
 
     private void startOptionPressed() {
-
+        if (this.romLocation == null){
+            Toast.makeText(this, "Load Valid Rom", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        Intent intent = new Intent(this, GameFrameActivity.class);
+        intent.putExtra(ROM_LOCATION_KEY, romLocation);
+        startActivity(intent);
     }
 
     private void recentGamesOptionPressed() {

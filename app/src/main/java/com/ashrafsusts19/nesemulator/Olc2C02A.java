@@ -1,22 +1,40 @@
 package com.ashrafsusts19.nesemulator;
 
 public abstract class Olc2C02A {
+    public static enum REGISTERS {
+        UNUSED,
+        SPRITE_OVERFLOW,
+        SPRITE_ZERO_HIT,
+        VERTICAL_BLANK,
+        REG,
+        GRAYSCALE,
+        RENDER_BACKGROUND_LEFT,
+        RENDER_SPRITES_LEFT,
+        RENDER_BACKGROUND,
+        RENDER_SPRITES,
+        ENHANCE_RED,
+        ENHANCE_GREEN,
+        ENHANCE_BLUE,
+        NAMETABLE_X,
+        NAMETABLE_Y,
+        INCREMENT_MODE,
+        PATTERN_SPRITE,
+        PATTERN_BACKGROUND,
+        SPRITE_SIZE,
+        SLAVE_MODE,
+        ENABLE_NMI,
+        COARSE_X,
+        COARSE_Y,
+        FINE_Y,
+    }
     public class Status{
-        public static enum MEMBER {
-            UNUSED,
-            SPRITE_OVERFLOW,
-            SPRITE_ZERO_HIT,
-            VERTICAL_BLANK,
-            REG;
-        }
-
         private short reg;
         private short unused, sprite_overflow, sprite_zero_hit, vertical_blank;
         public Status(){
             this.reg = 0x00;
             this.updateAttribute();
         }
-        public void set(MEMBER flag, short val){
+        public void set(REGISTERS flag, short val){
             val = ubyte(val);
             switch (flag){
                 case UNUSED:
@@ -35,14 +53,14 @@ public abstract class Olc2C02A {
                     this.reg = val;
                     break;
             }
-            if (flag == MEMBER.REG){
+            if (flag == REGISTERS.REG){
                 this.updateAttribute();
             }
             else {
                 this.updateRegister();
             }
         }
-        public short get(MEMBER flag){
+        public short get(REGISTERS flag){
             switch (flag){
                 case UNUSED:
                     return this.unused;
@@ -76,18 +94,6 @@ public abstract class Olc2C02A {
     }
 
     public class Mask{
-        public static enum MEMBER {
-            GRAYSCALE,
-            RENDER_BACKGROUND_LEFT,
-            RENDER_SPRITES_LEFT,
-            RENDER_BACKGROUND,
-            RENDER_SPRITES,
-            ENHANCE_RED,
-            ENHANCE_GREEN,
-            ENHANCE_BLUE,
-            REG;
-        }
-
         private short reg;
         private short grayscale;
         private short render_background_left;
@@ -101,7 +107,7 @@ public abstract class Olc2C02A {
             this.reg = 0x00;
             this.updateAttribute();
         }
-        public void set(MEMBER flag, short val){
+        public void set(REGISTERS flag, short val){
             val = ubyte(val);
             switch (flag){
                 case GRAYSCALE:
@@ -132,14 +138,14 @@ public abstract class Olc2C02A {
                     this.reg = val;
                     break;
             }
-            if (flag == MEMBER.REG){
+            if (flag == REGISTERS.REG){
                 this.updateAttribute();
             }
             else {
                 this.updateRegister();
             }
         }
-        public short get(MEMBER flag){
+        public short get(REGISTERS flag){
             switch (flag){
                 case GRAYSCALE:
                     return this.grayscale;
@@ -189,18 +195,6 @@ public abstract class Olc2C02A {
     }
 
     public class Control{
-        public static enum MEMBER {
-            NAMETABLE_X,
-            NAMETABLE_Y,
-            INCREMENT_MODE,
-            PATTERN_SPRITE,
-            PATTERN_BACKGROUND,
-            SPRITE_SIZE,
-            SLAVE_MODE,
-            ENABLE_NMI,
-            REG;
-        }
-
         private short reg;
         private short nametable_x;
         private short nametable_y;
@@ -214,7 +208,7 @@ public abstract class Olc2C02A {
             this.reg = 0x00;
             this.updateAttribute();
         }
-        public void set(MEMBER flag, short val){
+        public void set(REGISTERS flag, short val){
             val = ubyte(val);
             switch (flag){
                 case NAMETABLE_X:
@@ -245,14 +239,14 @@ public abstract class Olc2C02A {
                     this.reg = val;
                     break;
             }
-            if (flag == MEMBER.REG){
+            if (flag == REGISTERS.REG){
                 this.updateAttribute();
             }
             else {
                 this.updateRegister();
             }
         }
-        public short get(MEMBER flag){
+        public short get(REGISTERS flag){
             switch (flag){
                 case NAMETABLE_X:
                     return this.nametable_x;
@@ -302,16 +296,6 @@ public abstract class Olc2C02A {
     }
 
     public class Loopy_register{
-        public static enum MEMBER {
-            COARSE_X,
-            COARSE_Y,
-            NAMETABLE_X,
-            NAMETABLE_Y,
-            FINE_Y,
-            UNUSED,
-            REG;
-        }
-
         private int reg;
         private int coarse_x;
         private int coarse_y;
@@ -323,7 +307,7 @@ public abstract class Olc2C02A {
             this.reg = 0x00;
             this.updateAttribute();
         }
-        public void set(MEMBER flag, int val){
+        public void set(REGISTERS flag, int val){
             val = ushort(val);
             switch (flag){
                 case COARSE_X:
@@ -348,14 +332,14 @@ public abstract class Olc2C02A {
                     this.reg = val;
                     break;
             }
-            if (flag == MEMBER.REG){
+            if (flag == REGISTERS.REG){
                 this.updateAttribute();
             }
             else {
                 this.updateRegister();
             }
         }
-        public int get(MEMBER flag){
+        public int get(REGISTERS flag){
             switch (flag){
                 case COARSE_X:
                     return this.coarse_x;
