@@ -57,6 +57,8 @@ public class GameCanvas extends View {
         this.pixelHeight = this.getHeight() / 240.0f;
         this.pixelWidthInt = this.getWidth() / 256;
         this.pixelHeightInt = this.getHeight() / 240;
+        if (pixelWidthInt > pixelHeightInt) pixelWidthInt = pixelHeightInt;
+        else if (pixelHeightInt > pixelWidthInt) pixelHeightInt = pixelWidthInt;
         this.canvasHeight = this.pixelHeightInt * 240;
         this.canvasWidth = this.pixelWidthInt * 256;
         this.startx = (this.getWidth() - this.canvasWidth) / 2;
@@ -94,7 +96,7 @@ public class GameCanvas extends View {
         super.onDraw(canvas);
         canvas.drawColor(Color.parseColor("#000000"));
         if (this.gameScreen != null){
-            drawSprite(startx, starty, canvas);
+            drawSprite(startx, 0, canvas);
         }
         else {
             System.out.println("No gameScreen");

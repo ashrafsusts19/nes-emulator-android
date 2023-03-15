@@ -176,6 +176,9 @@ public class MainActivityHome extends AppCompatActivity {
         if (romLocs == null){
             romLocs = new HashSet<>();
         }
+        for (String s: romLocs){
+            System.out.println(s);
+        }
         romLocs.add(data);
         editor.putStringSet(ROM_LOCATION_KEY, romLocs);
 
