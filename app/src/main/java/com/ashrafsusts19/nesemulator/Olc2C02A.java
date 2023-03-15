@@ -396,8 +396,8 @@ public abstract class Olc2C02A {
     }
 
     public class Sprite{
-        int width, height;
-        Pixel[][] pixels;
+        public int width, height;
+        public Pixel[][] pixels;
         public Sprite(int w, int h){
             this.width = w;
             this.height = h;
