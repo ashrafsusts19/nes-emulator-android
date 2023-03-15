@@ -13,6 +13,7 @@ import android.Manifest;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.view.View;
@@ -29,10 +30,13 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Set;
 
 public class MainActivityHome extends AppCompatActivity {
 
     public static final String ROM_LOCATION_KEY = "ROM_LOCATION";
+    public static final String SHARED_PREFS = "SHARED_PREFERENCES";
     private String romLocation = null;
     private ListView optionsList;
     private int STORAGE_PERMISSION_CODE = 1;
@@ -146,6 +150,11 @@ public class MainActivityHome extends AppCompatActivity {
 
             startForResultRomLocation.launch(intent);
         }
+        else {
+//            Intent intent = new Intent(this, LoadGameActivity.class);
+//
+//            startForResultRomLocation.launch(intent);
+        }
     }
 
     private void startOptionPressed() {
@@ -153,17 +162,34 @@ public class MainActivityHome extends AppCompatActivity {
             Toast.makeText(this, "Load Valid Rom", Toast.LENGTH_SHORT).show();
             return;
         }
+        addRomData(this.romLocation);
         Intent intent = new Intent(this, GameFrameActivity.class);
         intent.putExtra(ROM_LOCATION_KEY, romLocation);
         startActivity(intent);
     }
 
-    private void recentGamesOptionPressed() {
+    private void addRomData(String data){
+        SharedPreferences sharedPreferences = getSharedPreferences(SHARED_PREFS, MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        Set<String> romLocs;
+        romLocs = sharedPreferences.getStringSet(ROM_LOCATION_KEY, null);
+        if (romLocs == null){
+            romLocs = new HashSet<>();
+        }
+        romLocs.add(data);
+        editor.putStringSet(ROM_LOCATION_KEY, romLocs);
 
     }
 
-    private void optionsOptionPressed() {
+    private void recentGamesOptionPressed() {
+        Intent intent = new Intent(this, RecentGamesActivity.class);
 
+        startForResultRomLocation.launch(intent);
+    }
+
+    private void optionsOptionPressed() {
+        Intent intent = new Intent(this, OptionsActivity.class);
+        startActivity(intent);
     }
 
     private void aboutOptionPressed() {
@@ -172,7 +198,7 @@ public class MainActivityHome extends AppCompatActivity {
     }
 
     private void exitOptionPressed() {
-
+        System.exit(0);
     }
 
     private void requestStoragePermission() {

@@ -14,6 +14,12 @@
         android:theme="@style/Theme.NesEmulator"
         tools:targetApi="31">
         <activity
+            android:name=".OptionsActivity"
+            android:exported="false" />
+        <activity
+            android:name=".RecentGamesActivity"
+            android:exported="false" />
+        <activity
             android:name=".GameFrameActivity"
             android:exported="false" />
         <activity
